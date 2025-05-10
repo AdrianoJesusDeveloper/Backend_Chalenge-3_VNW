@@ -1,6 +1,7 @@
 from src.model import db
 from sqlalchemy.schema import Column, ForeignKey
-from sqlalchemy.types import Integer, String, DECIMAL, Date
+from sqlalchemy.types import Integer, String, DECIMAL,Date
+from datetime import date
 from sqlalchemy import func # <- importa uma função geradora
 
 
@@ -13,7 +14,7 @@ class Reembolso(db.Model):
     empresa = Column(String(50), nullable=False)
     num_prestacao = Column(Integer, nullable=False)
     descricao = Column(String(255))
-    data = Column(Date, nullable=False, server_default= func.current_date())
+    data = Column(Date, nullable=False, default=date.today)
     tipo_reembolso = Column(String(30), nullable=False)
     centro_custo = Column(String(100), nullable=False)
     ordem_interna = Column(String(25))
