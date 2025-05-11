@@ -1,7 +1,8 @@
-# Novo conteúdo do reembolso_controller.py com rotas obrigatórias incluídas
-reembolso_controller_code = """
+# Novo conteúdo do reembolso_controller.py com rotas obrigatórias incluídaso_controller_code = """
 from flask import request, jsonify, Blueprint
+from datetime import date
 from src.model.reembolso_model import Reembolso
+from src.model.colaborador_model import Colaborador  # Import the Colaborador model
 from src.model import db
 
 bp_reembolso = Blueprint('reembolso', __name__, url_prefix='/reembolso')
@@ -21,12 +22,37 @@ def deletar_linha_reembolso(linha_id):
 @bp_reembolso.route('/solicitar', methods=['POST'])
 def solicitar_reembolso():
     dados = request.get_json()
+    
+    # Verificar se colaborador existe
+    colaborador = db.session.get(Colaborador, dados.get('id_colaborador'))
+    if not colaborador:
+        return jsonify({'mensagem': 'Colaborador não encontrado'}), 404
+
     try:
-        novo_reembolso = Reembolso(**dados)
+        novo_reembolso = Reembolso(
+            colaborador=colaborador.nome,
+            empresa=dados.get('empresa'),
+            num_prestacao=dados.get('num_prestacao'),
+            descricao=dados.get('descricao'),
+            data=dados.get('data', date.today()),
+            tipo_reembolso=dados.get('tipo_reembolso'),
+            centro_custo=dados.get('centro_custo'),
+            ordem_interna=dados.get('ordem_interna'),
+            divisao=dados.get('divisao'),
+            pep=dados.get('pep'),
+            moeda=dados.get('moeda'),
+            distancia_km=dados.get('distancia_km'),
+            valor_km=dados.get('valor_km'),
+            valor_faturado=dados.get('valor_faturado'),
+            despesa=dados.get('despesa'),
+            id_colaborador=dados.get('id_colaborador')
+        )
+        
         db.session.add(novo_reembolso)
         db.session.commit()
         return jsonify({'mensagem': 'Solicitação de reembolso registrada com sucesso'}), 201
     except Exception as e:
+        db.session.rollback()
         return jsonify({'erro': str(e)}), 400
 
 # NOVA ROTA: CONSULTAR POR NUM PRESTAÇÃO
@@ -78,13 +104,5 @@ def criar_tabelas_reembolso():
         return jsonify({'mensagem': 'Tabelas criadas com sucesso'}), 201
     except Exception as e:
         return jsonify({'erro': str(e)}), 500
-"""
 
-# Caminho do arquivo
-reembolso_path = "/mnt/data/sispar_atualizado/src/controller/reembolso_controller.py"
 
-# Salvar o novo código
-with open(reembolso_path, "w") as f:
-    f.write(reembolso_controller_code)
-
-reembolso_path

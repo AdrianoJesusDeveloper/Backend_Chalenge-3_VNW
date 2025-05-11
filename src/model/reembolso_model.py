@@ -10,7 +10,8 @@ class Reembolso(db.Model):
     
 # -----------------------------ATRIBUTOS---------------------------------------------
     id = Column(Integer, primary_key=True, autoincrement=True)
-    colaborador = Column(String(200), nullable=False)
+    colaborador_id = Column(Integer, ForeignKey('colaborador.id'), nullable=False)
+    ccolaborador_rel = db.relationship('Colaborador', backref='reembolsos')
     empresa = Column(String(50), nullable=False)
     num_prestacao = Column(Integer, nullable=False)
     descricao = Column(String(255))

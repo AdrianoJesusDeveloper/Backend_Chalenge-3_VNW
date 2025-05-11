@@ -3,8 +3,9 @@ from flask import Blueprint, request, jsonify
 from src.model.colaborador_model import Colaborador
 from src.model import db
 from src.security.security import hash_senha, checar_senha
-from src.schemas import ColaboradorSchema
-colaborador_schema = ColaboradorSchema()
+from src.schemas.colaborador_schemas import ColaboradorSchema
+
+colaborador_schemas = ColaboradorSchema()
 
 bp_colaborador = Blueprint('colaborador', __name__, url_prefix='/colaborador')
 
@@ -33,7 +34,7 @@ def pegar_dados_todos_colaboradores():
 def cadastrar_colaborador():
     dados_requisicao = request.get_json()
     
-    erros = colaborador_schema.validate(dados_requisicao)
+    erros = colaborador_schemas.validate(dados_requisicao)
     if erros:
         return jsonify(erros), 400
 

@@ -42,15 +42,56 @@ python run.py
 📫 Rotas disponíveis
 Colaboradores
 POST /colaborador/cadastrar - Cadastrar colaborador
+## 📫 Rotas disponíveis
+
+### Colaboradores
+- `POST /colaborador/cadastrar` - Cadastrar novo colaborador
+  ```json
+  {
+    "nome": "Fulano",
+    "email": "fulano@empresa.com",
+    "senha": "senha123",
+    "cargo": "Desenvolvedor",
+    "salario": 5000.00
+  }
 
 POST /colaborador/login - Login de colaborador
+{
+  "email": "fulano@empresa.com",
+  "senha": "senha123"
+}
 
 GET /colaborador/todos-colaboradores - Listar todos os colaboradores
 
 Reembolso
 POST /reembolso/solicitar - Criar nova solicitação de reembolso ✅
+{
+  "colaborador": "Fulano",
+  "empresa": "Empresa X",
+  "num_prestacao": 12345,
+  "tipo_reembolso": "Transporte",
+  "valor_faturado": 150.50,
+  "id_colaborador": 1
+  // outros campos obrigatórios
+}
 
 GET /reembolso/prestacao/<num> - Buscar reembolso por número de prestação ✅
+
+### 5. Configuração do Banco de Dados
+
+**config.py:**
+Atualizar para usar variáveis de ambiente corretamente:
+
+```python
+from os import environ
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Config:
+    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL', 'mysql+pymysql://usuario:senha@localhost/nome_banco')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = environ.get('SECRET_KEY', 'segredo-desenvolvimento')
 
 POST /reembolso/enviar/<id> - Enviar para análise
 
