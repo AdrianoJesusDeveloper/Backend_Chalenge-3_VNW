@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: sispar-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn run:app"
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SQLALCHEMY_DATABASE_URI
+        value: mysql+pymysql://usuario:senha@host/banco
+      - key: SECRET_KEY
+        value: sua_chave_secreta
+      - key: JWT_SECRET_KEY
+        value: sua_chave_jwt
