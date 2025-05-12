@@ -1,6 +1,12 @@
-Traceback (most recent call last):
-  File "C:\Users\adria\Desktop\vnw\challenge03-Vai-Na-Web\Projeto-SISPAR\BACKEND\api\run.py", line 1, in <module>
-    from src.app import create_app
-  File "C:\Users\adria\Desktop\vnw\challenge03-Vai-Na-Web\Projeto-SISPAR\BACKEND\api\src\app.py", line 2, in <module>
-    from flasgger import Swagger, LazyString, LazyJSONEncoder
-ModuleNotFoundError: No module named 'flasgger'
+✅ Tabelas do banco de dados criadas com sucesso
+ * Serving Flask app 'src.app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with stat
+✅ Tabelas do banco de dados criadas com sucesso
+ * Debugger is active!
+ * Debugger PIN: 261-595-440
+127.0.0.1 - - [12/May/2025 14:39:02] "POST /colaborador/cadastrar HTTP/1.1" 404 -
+127.0.0.1 - - [12/May/2025 14:41:58] "POST /colaborador/cadastrar HTTP/1.1" 404 -

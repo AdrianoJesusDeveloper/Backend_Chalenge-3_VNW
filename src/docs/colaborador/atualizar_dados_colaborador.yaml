@@ -1,0 +1,49 @@
+tags:
+  - Colaborador
+summary: Atualizar dados de um colaborador
+description: Atualiza informações parciais ou completas de um colaborador existente
+
+parameters:
+  - in: path
+    name: id_colaborador
+    required: true
+    type: integer
+    description: ID do colaborador a ser atualizado
+    example: 1
+  
+  - in: body
+    name: corpo
+    required: true
+    schema:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: Samuel Silvério Jr
+          description: Novo nome do colaborador (opcional)
+        cargo:
+          type: string
+          example: Desenvolvedor Sênior
+          description: Novo cargo do colaborador (opcional)
+        cracha:
+          type: string
+          example: BE12345
+          description: Novo número do crachá (opcional)
+      minProperties: 1
+      additionalProperties: false
+
+responses:
+  200:
+    description: Dados do colaborador atualizados com sucesso
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Dados do colaborador atualizados com sucesso
+  400:
+    description: Nenhum campo válido para atualização foi fornecido
+  404:
+    description: Colaborador não encontrado
+  500:
+    description: Erro inesperado ao processar a requisição

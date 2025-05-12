@@ -1,0 +1,32 @@
+tags:
+  - Reembolso
+summary: Excluir linha de reembolso
+description: Remove uma linha específica de reembolso pelo ID
+
+parameters:
+  - in: path
+    name: linha_id
+    required: true
+    type: integer
+    description: ID da linha de reembolso a ser excluída
+    example: 1
+
+responses:
+  200:
+    description: Linha excluída com sucesso
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Linha de reembolso excluída com sucesso
+  404:
+    description: Linha não encontrada
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Linha de reembolso não encontrada
+  500:
+    description: Erro interno no servidor

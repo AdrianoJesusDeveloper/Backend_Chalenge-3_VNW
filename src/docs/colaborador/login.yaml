@@ -1,0 +1,53 @@
+tags:
+  - Autenticação
+summary: Realizar login de colaborador
+description: Autentica um colaborador no sistema usando email e senha
+
+parameters:
+  - in: body
+    name: credenciais
+    required: true
+    schema:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: usuario@empresa.com
+          description: E-mail cadastrado do colaborador
+        senha:
+          type: string
+          format: password
+          example: senha123
+          description: Senha do colaborador
+      required:
+        - email
+        - senha
+
+responses:
+  200:
+    description: Login realizado com sucesso
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Login realizado com sucesso
+  400:
+    description: Campos obrigatórios não preenchidos
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Todos os campos devem ser preenchidos
+  404:
+    description: Usuário não encontrado
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: O usuário não foi encontrado
+  500:
+    description: Erro interno no servidor

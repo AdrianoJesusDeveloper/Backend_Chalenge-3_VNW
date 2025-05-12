@@ -17,6 +17,7 @@ dados = [
 ]
 
 @bp_colaborador.route('/todos-colaboradores', methods=['GET'])
+@swag_from("../docs/colaborador/pegar_dados_todos_colaboradores.yaml")
   # Observação: Crie um arquivo específico para listagem
 def pegar_dados_todos_colaboradores():
     
@@ -57,6 +58,7 @@ def cadastrar_colaborador():
 # # TAREFA -> VALIDAÇÃO DO USUARIO. VERIFICAÇÃO DE USUARIO NO BANCO DE DADOS (MOCKADO)
 
 @bp_colaborador.route('/atualizar/<int:id_colaborador>', methods=['PUT'])
+@swag_from("../docs/colaborador/atualizar_dados_colaborador.yaml")
 def atualizar_dados_colaborador(id_colaborador):
     
     dados_colaborador = request.get_json()
@@ -77,6 +79,7 @@ def atualizar_dados_colaborador(id_colaborador):
 
 
 @bp_colaborador.route('/login', methods=['POST'])
+@swag_from("../docs/colaborador/login.yaml")
   # Observação: Crie um arquivo específico para login se necessário
 def login():
     

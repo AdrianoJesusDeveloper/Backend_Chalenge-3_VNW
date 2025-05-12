@@ -1,0 +1,32 @@
+tags:
+  - Reembolso
+summary: Cancelar solicitação de reembolso
+description: Altera o status de um reembolso para "Cancelada"
+
+parameters:
+  - in: path
+    name: reembolso_id
+    required: true
+    type: integer
+    description: ID do reembolso a ser cancelado
+    example: 1
+
+responses:
+  200:
+    description: Solicitação cancelada com sucesso
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Solicitação cancelada com sucesso
+  404:
+    description: Solicitação não encontrada
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Solicitação não encontrada
+  500:
+    description: Erro interno no servidor

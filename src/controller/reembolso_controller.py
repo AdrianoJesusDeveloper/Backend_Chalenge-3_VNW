@@ -11,6 +11,7 @@ bp_reembolso = Blueprint('reembolso', __name__, url_prefix='/reembolso')
 
 # ROTA PARA EXCLUIR LINHA DE REEMBOLSO
 @bp_reembolso.route('/linha/<int:linha_id>', methods=['DELETE'])
+@swag_from("../docs/reebolso/deletar_linha_reembolso.yaml")
 def deletar_linha_reembolso(linha_id):
     linha = db.session.get(Reembolso, linha_id)
     if not linha:
@@ -76,7 +77,7 @@ def solicitar_reembolso():
 
 # NOVA ROTA: CONSULTAR POR NUM PRESTAÇÃO
 @bp_reembolso.route('/prestacao/<int:num>', methods=['GET'])
-# @swag_from('../docs/reebolso/solicitação_reebolso.yml') # Verifique se o caminho do arquivo YML está correto
+@swag_from("../docs/reebolso/consultar_por_prestacao.yaml")
 def consultar_por_prestacao(num):
     reembolso = db.session.execute(
         db.select(Reembolso).where(Reembolso.num_prestacao == num)
@@ -97,6 +98,7 @@ def consultar_por_prestacao(num):
 
 # ROTA PARA ENVIAR SOLICITAÇÃO PARA ANÁLISE
 @bp_reembolso.route('/enviar/<int:reembolso_id>', methods=['POST'])
+@swag_from("../docs/reebolso/enviar_para_analise.yaml")
 def enviar_para_analise(reembolso_id):
     reembolso = db.session.get(Reembolso, reembolso_id)
     if not reembolso:
@@ -108,6 +110,7 @@ def enviar_para_analise(reembolso_id):
 
 # ROTA PARA CANCELAR SOLICITAÇÃO
 @bp_reembolso.route('/cancelar/<int:reembolso_id>', methods=['POST'])
+@swag_from("../docs/reebolso/cancelar_reembolso.yaml")
 def cancelar_reembolso(reembolso_id):
     reembolso = db.session.get(Reembolso, reembolso_id)
     if not reembolso:

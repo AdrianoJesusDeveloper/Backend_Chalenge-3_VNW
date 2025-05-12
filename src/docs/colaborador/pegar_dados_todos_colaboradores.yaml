@@ -1,0 +1,36 @@
+tags:
+  - Colaborador
+summary: Listar todos os colaboradores
+description: Retorna uma lista com todos os colaboradores cadastrados no sistema
+
+responses:
+  200:
+    description: Lista de colaboradores retornada com sucesso
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          nome:
+            type: string
+            example: Samuel Silvério
+          cargo:
+            type: string
+            example: Desenvolvedor Back-end
+          cracha:
+            type: string
+            example: BE12310
+          email:
+            type: string
+            example: samuel@empresa.com
+          salario:
+            type: number
+            format: float
+            example: 5000.00
+  204:
+    description: Nenhum colaborador encontrado
+  500:
+    description: Erro interno no servidor

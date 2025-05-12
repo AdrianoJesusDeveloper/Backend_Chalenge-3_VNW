@@ -1,0 +1,47 @@
+tags:
+  - Reembolso
+summary: Consultar reembolso por número de prestação
+description: Retorna os dados de um reembolso específico pelo número de prestação
+
+parameters:
+  - in: path
+    name: num
+    required: true
+    type: integer
+    description: Número da prestação a ser consultada
+    example: 123
+
+responses:
+  200:
+    description: Dados do reembolso
+    schema:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        colaborador:
+          type: string
+          example: João Silva
+        empresa:
+          type: string
+          example: Empresa XYZ
+        num_prestacao:
+          type: integer
+          example: 123
+        descricao:
+          type: string
+          example: Reembolso de transporte
+        status:
+          type: string
+          example: Pendente
+  404:
+    description: Reembolso não encontrado
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Reembolso não encontrado
+  500:
+    description: Erro interno no servidor

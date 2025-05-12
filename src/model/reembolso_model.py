@@ -10,8 +10,7 @@ class Reembolso(db.Model):
     
 # -----------------------------ATRIBUTOS---------------------------------------------
     id = Column(Integer, primary_key=True, autoincrement=True)
-    colaborador_id = Column(Integer, ForeignKey('colaborador.id'), nullable=False)
-    ccolaborador_rel = db.relationship('Colaborador', backref='reembolsos')
+    colaborador_id = Column(Integer, ForeignKey('colaborador.id'), nullable=False)    
     empresa = Column(String(50), nullable=False)
     num_prestacao = Column(Integer, nullable=False)
     descricao = Column(String(255))
@@ -25,8 +24,7 @@ class Reembolso(db.Model):
     distancia_km = Column(String(255))
     valor_km = Column(DECIMAL(10,2))
     valor_faturado = Column(DECIMAL(10,2), nullable=False)
-    despesa = Column(DECIMAL(10,2))
-    id_colaborador = Column(Integer, ForeignKey(column='colaborador.id'), nullable=False)
+    despesa = Column(DECIMAL(10,2))    
     status = Column(String(30), nullable=False) 
 # -------------------------------------------------------------------------------------
 

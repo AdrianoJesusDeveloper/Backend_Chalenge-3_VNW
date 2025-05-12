@@ -1,0 +1,32 @@
+tags:
+  - Reembolso
+summary: Enviar reembolso para análise
+description: Altera o status de um reembolso para "Em Análise"
+
+parameters:
+  - in: path
+    name: reembolso_id
+    required: true
+    type: integer
+    description: ID do reembolso a ser enviado para análise
+    example: 1
+
+responses:
+  200:
+    description: Solicitação enviada para análise
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Solicitação enviada para análise com sucesso
+  404:
+    description: Solicitação não encontrada
+    schema:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Solicitação não encontrada
+  500:
+    description: Erro interno no servidor
