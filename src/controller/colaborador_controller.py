@@ -4,6 +4,7 @@ from src.model.colaborador_model import Colaborador
 from src.model import db
 from src.security.security import hash_senha, checar_senha
 from src.schemas.colaborador_schemas import ColaboradorSchema
+from flasgger import swag_from
 
 colaborador_schemas = ColaboradorSchema()
 
@@ -16,6 +17,7 @@ dados = [
 ]
 
 @bp_colaborador.route('/todos-colaboradores', methods=['GET'])
+  # Observação: Crie um arquivo específico para listagem
 def pegar_dados_todos_colaboradores():
     
     colaboradores = db.session.execute(
@@ -31,6 +33,7 @@ def pegar_dados_todos_colaboradores():
 # TAREFA -> VALIDAÇÃO DO CAMPO CRACHA. NÃO PODEMOS TER DUPLICATAS
 
 @bp_colaborador.route('/cadastrar', methods=['POST'])
+@swag_from('../docs/colaborador/cadastrar_colaborador.yml')
 def cadastrar_colaborador():
     dados_requisicao = request.get_json()
     
@@ -74,6 +77,7 @@ def atualizar_dados_colaborador(id_colaborador):
 
 
 @bp_colaborador.route('/login', methods=['POST'])
+  # Observação: Crie um arquivo específico para login se necessário
 def login():
     
     dados_requisicao = request.get_json()

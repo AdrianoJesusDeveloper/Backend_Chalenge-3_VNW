@@ -1,9 +1,11 @@
-# Novo conteúdo do reembolso_controller.py com rotas obrigatórias incluídaso_controller_code = """
+# reembolso_controller.py - Versão corrigida (com a limpeza e algumas melhorias menores)
+
 from flask import request, jsonify, Blueprint
-from datetime import date
+from datetime import date, datetime # Importar datetime para parsear a string de data
 from src.model.reembolso_model import Reembolso
-from src.model.colaborador_model import Colaborador  # Import the Colaborador model
+from src.model.colaborador_model import Colaborador
 from src.model import db
+from flasgger import swag_from
 
 bp_reembolso = Blueprint('reembolso', __name__, url_prefix='/reembolso')
 
@@ -20,21 +22,36 @@ def deletar_linha_reembolso(linha_id):
 
 # NOVA ROTA: SOLICITAR REEMBOLSO
 @bp_reembolso.route('/solicitar', methods=['POST'])
+@swag_from('../docs/reebolso/solicitação_reebolso.yml') # Verifique se o caminho do arquivo YML está correto
 def solicitar_reembolso():
     dados = request.get_json()
-    
+
     # Verificar se colaborador existe
     colaborador = db.session.get(Colaborador, dados.get('id_colaborador'))
     if not colaborador:
         return jsonify({'mensagem': 'Colaborador não encontrado'}), 404
 
     try:
+        # Tratar a data de string para objeto date
+        reembolso_data_str = dados.get('data')
+        reembolso_data = date.today() # Valor padrão
+
+        if reembolso_data_str:
+            try:
+                # Assumindo o formato YYYY-MM-DD. Ajuste se necessário.
+                reembolso_data = datetime.strptime(reembolso_data_str, '%Y-%m-%d').date()
+            except ValueError:
+                return jsonify({'erro': 'Formato de data inválido. Use YYYY-MM-DD.'}), 400
+
         novo_reembolso = Reembolso(
-            colaborador=colaborador.nome,
+            # CUIDADO: Você está passando colaborador.nome, mas o modelo tem colaborador_id e um relacionamento.
+            # Se o relacionamento ccolaborador_rel deve ser usado para acessar o objeto Colaborador,
+            # você não precisa armazenar o nome aqui.
+            colaborador=colaborador.nome, # Considere remover ou ajustar isso dependendo do seu modelo
             empresa=dados.get('empresa'),
             num_prestacao=dados.get('num_prestacao'),
             descricao=dados.get('descricao'),
-            data=dados.get('data', date.today()),
+            data=reembolso_data, # Use a data processada
             tipo_reembolso=dados.get('tipo_reembolso'),
             centro_custo=dados.get('centro_custo'),
             ordem_interna=dados.get('ordem_interna'),
@@ -45,18 +62,21 @@ def solicitar_reembolso():
             valor_km=dados.get('valor_km'),
             valor_faturado=dados.get('valor_faturado'),
             despesa=dados.get('despesa'),
-            id_colaborador=dados.get('id_colaborador')
+            id_colaborador=dados.get('id_colaborador') # Isso mapeia para a ForeignKey
         )
-        
+
         db.session.add(novo_reembolso)
         db.session.commit()
         return jsonify({'mensagem': 'Solicitação de reembolso registrada com sucesso'}), 201
     except Exception as e:
         db.session.rollback()
-        return jsonify({'erro': str(e)}), 400
+        print(f"Erro ao solicitar reembolso: {e}") # Logar o erro para depuração
+        return jsonify({'erro': 'Ocorreu um erro interno ao processar sua solicitação.'}), 500 # Mensagem genérica para o usuário
+
 
 # NOVA ROTA: CONSULTAR POR NUM PRESTAÇÃO
 @bp_reembolso.route('/prestacao/<int:num>', methods=['GET'])
+# @swag_from('../docs/reebolso/solicitação_reebolso.yml') # Verifique se o caminho do arquivo YML está correto
 def consultar_por_prestacao(num):
     reembolso = db.session.execute(
         db.select(Reembolso).where(Reembolso.num_prestacao == num)
@@ -65,9 +85,10 @@ def consultar_por_prestacao(num):
     if not reembolso:
         return jsonify({'mensagem': 'Reembolso não encontrado'}), 404
 
+    # Considere adicionar um método .to_dict() ao modelo Reembolso para serialização
     return jsonify({
         'id': reembolso.id,
-        'colaborador': reembolso.colaborador,
+        'colaborador': reembolso.colaborador, # Verifique se isso deve ser o nome ou vir do relacionamento
         'empresa': reembolso.empresa,
         'num_prestacao': reembolso.num_prestacao,
         'descricao': reembolso.descricao,
@@ -97,12 +118,16 @@ def cancelar_reembolso(reembolso_id):
     return jsonify({'mensagem': 'Solicitação cancelada com sucesso'}), 200
 
 # ROTA OPCIONAL PARA CRIAR AS TABELAS DO BANCO DE DADOS
-@bp_reembolso.route('/criar-tabelas', methods=['POST'])
-def criar_tabelas_reembolso():
-    try:
-        db.create_all()
-        return jsonify({'mensagem': 'Tabelas criadas com sucesso'}), 201
-    except Exception as e:
-        return jsonify({'erro': str(e)}), 500
-
-
+# Esta rota é redundante se você já chama db.create_all() em create_app()
+# e pode causar problemas de contexto se chamada de forma isolada.
+# É recomendado remover esta rota e confiar na inicialização em app.py.
+# @bp_reembolso.route('/criar-tabelas', methods=['POST'])
+# def criar_tabelas_reembolso():
+#     try:
+#         # db.create_all() precisa de um contexto de aplicação ativo.
+#         # Chamar diretamente aqui pode falhar dependendo de como a rota é acessada.
+#         db.create_all()
+#         return jsonify({'mensagem': 'Tabelas criadas com sucesso'}), 201
+#     except Exception as e:
+#         print(f"Erro ao criar tabelas pela rota: {e}")
+#         return jsonify({'erro': 'Ocorreu um erro ao criar as tabelas.'}), 500
